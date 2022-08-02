@@ -65,15 +65,11 @@ def main():
         if l.startswith(ERROR_PREFIX) or l.startswith(WARNING_PREFIX):
             codes.append(l.split()[0])
 
-    entries = []
-    for i, c in enumerate(codes):
-        entries.append('        %s = %s;' % (c, 1000 + i))
-
-    fd = open(FLAGS.output_proto_file, 'w')
-    fd.write(PROTO_TEMPLATE % (' '.join(sys.argv),
-                               FLAGS.proto_package_name,
-                               '\n'.join(entries)))
-    fd.close()
+    entries = [f'        {c} = {1000 + i};' for i, c in enumerate(codes)]
+    with open(FLAGS.output_proto_file, 'w') as fd:
+        fd.write(PROTO_TEMPLATE % (' '.join(sys.argv),
+                                   FLAGS.proto_package_name,
+                                   '\n'.join(entries)))
 
 if __name__ == '__main__':
     main()
